@@ -1,0 +1,141 @@
+Thesis - Academic AI Editor
+DEVELOPMENT AUDIT & STRATEGIC ROADMAP REPORT
+Date: January 3, 2026
+Status: Confidential
+Prepared By: Advanced Agentic Logic Core
+
+================================================================================
+1. EXECUTIVE SUMMARY
+================================================================================
+This document outlines a comprehensive strategy to elevate the "Thesis" platform from a functional prototype to a production-grade academic workspace. It identifies critical architectural vulnerabilities in the current codebase and proposes a high-impact feature roadmap targeting both academic rigor and general public utility.
+
+The focus is on two pillars:
+1. "Academic Integrity & Depth" for students/researchers.
+2. "User Experience & Versatility" for the general public.
+
+================================================================================
+2. STRATEGIC FEATURE EXPANSION
+================================================================================
+
+--------------------------------------------------------------------------------
+A. FOR STUDENTS & RESEARCHERS (Target: Academic Rigor)
+--------------------------------------------------------------------------------
+
+1. FEATURE: Integrated Plagiarism & GenAI Detection
+   [Rationale]: Institutions require originality. Users need assurance that their AI-assisted grafts won't flag academic misconduct filters.
+   [Implementation Strategy]:
+   - Integration: Implement a "Pre-Check" middleware using APIs like CopyLeaks or Turnitin.
+   - UI/UX: Add a "Confidence Score" badge in the editor toolbar.
+   - Tech: Create a serverless edge function (Supabase Functions) to proxy requests to the scanning API to keep keys secure.
+
+2. FEATURE: Live Citation Manager Integration
+   [Rationale]: Static uploads are insufficient. Researchers rely on dynamic libraries like Zotero or Mendeley.
+   [Implementation Strategy]:
+   - Protocol: Implement OAuth 2.0 flow to connect user's Zotero account.
+   - Processing: Use `citeproc-js` libraries to render CSL (Citation Style Language) styles dynamically.
+   - Feature: "Quick Cite" command (triggered by `@` in the editor) to search the connected library and insert a reference object.
+
+3. FEATURE: Real-Time Collaborative Editing ("Multiplayer")
+   [Rationale]: Academic work is increasingly collaborative.
+   [Implementation Strategy]:
+   - Sync Engine: Upgrade from simple DB saves to Supabase Realtime (WebSockets).
+   - State Management: Implement Yjs (CRDT library) to handle conflict resolution when two users edit the same sentence.
+   - Presence: Add "User Avatars" showing cursor positions of active collaborators.
+
+4. FEATURE: "Deep Work" Study Mode
+   [Rationale]: The modern web is distracting. deeply focused writing requires isolation.
+   [Implementation Strategy]:
+   - UI: A "Zen Mode" toggle that removes the sidebar, header, and OS elements, going full-screen.
+   - Functionality: Integrated Pomodoro timer (25/5 intervals).
+   - Blocking: Optional "hard mode" that prevents tab switching (via Page Visibility API warnings).
+
+--------------------------------------------------------------------------------
+B. FOR PUBLIC USERS (Target: Versatility & Adoption)
+--------------------------------------------------------------------------------
+
+5. FEATURE: Next-Gen Rich Text Architecture
+   [Rationale]: The current `textarea` implementation limits formatting options (bold, headers, lists) which general users expect.
+   [Implementation Strategy]:
+   - Framework: Migrate the editor core to **Tiptap** (React wrapper for ProseMirror).
+   - Capability: Enables block-based editing (Notion-style), easier image dragging, and rich markdown shortcuts.
+
+6. FEATURE: Template Gallery & Engine
+   [Rationale]: Expanding the TAM (Total Addressable Market) beyond thesis writers.
+   [Implementation Strategy]:
+   - Data Structure: specific `system_instruction` prompts for different document types stored in a `templates` table in Supabase.
+   - Categories:
+     - "Grant Proposal" (Strict structure, persuasive tone)
+     - "Technical Spec" (Mermaid diagram heavy)
+     - "Newsletter" (Casual tone, image heavy)
+
+7. FEATURE: One-Click Web Publishing (Portfolio Mode)
+   [Rationale]: Instant gratification and sharing of work.
+   [Implementation Strategy]:
+   - Routing: Create a public route `thesis.ai/p/[unique_slug]`.
+   - SSR: Use Server-Side Generation for these pages to ensure SEO indexing.
+   - Open Graph: Auto-generate social preview images based on the document title/summary for Twitter/LinkedIn sharing.
+
+8. FEATURE: Native .DOCX & PDF Infrastructure
+   [Rationale]: The current HTML-to-Word export is brittle.
+   [Implementation Strategy]:
+   - Library: Adopt `docx` (JS library) for generating valid XML-based Word files.
+   - Styling: Map CSS variables directly to Word styles (Normal, Heading 1) to ensure the document looks professional when opened in MS Word.
+
+================================================================================
+3. CRITICAL SYSTEM AUDIT & REMEDIATION PLAN
+================================================================================
+
+Below is a technical audit of the current codebase (`d:\copy\thesis---academic-ai-editor (1)`), prioritizing security and stability.
+
+--------------------------------------------------------------------------------
+CRITICAL ERROR 1: Exposed Security Credentials
+--------------------------------------------------------------------------------
+[Location]: `services/supabase.ts`
+[Issue]: The Supabase URL and Anonymous Key are hardcoded strictly as strings in the source code.
+[Risk]: High. Anyone with access to the repo can flood the database or exploit RLS policies.
+[Remediation Code]:
+   Replace:
+     const supabaseUrl = 'https://qkcrnnlravoizvgmgpze.supabase.co';
+     const supabaseAnonKey = '...';
+   With:
+     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+--------------------------------------------------------------------------------
+CRITICAL ERROR 2: Environment Variable Mismatch
+--------------------------------------------------------------------------------
+[Location]: `services/geminiService.ts` vs `vite.config.ts`
+[Issue]: The application uses a mix of `process.env.API_KEY` and `env.GEMINI_API_KEY`, but Vite client-side code requires `import.meta.env.VITE_...`. The current `define` block in `vite.config.ts` is attempting to polyfill `process.env`, which is an anti-pattern in Vite.
+[Remediation Plan]:
+   1. In `.env.local`: Rename keys to `VITE_GEMINI_API_KEY`.
+   2. In Code: Access solely via `import.meta.env.VITE_GEMINI_API_KEY`.
+   3. Remove the manual `define` block in `vite.config.ts`.
+
+--------------------------------------------------------------------------------
+CRITICAL ERROR 3: Image Generation Capability Check
+--------------------------------------------------------------------------------
+[Location]: `services/geminiService.ts` -> `generateSectionImage`
+[Issue]: The code prompts a text/multimodal model (`gemini-2.5-flash`) to return an inline image mime-type. Standard LLMs cannot "render" pixels directly into the response stream unless specifically using an Imagen tool or returning SVG code.
+[Remediation Plan]:
+   - Option A (SVG): Update prompt to "Generate an SVG code block representing..." (Most reliable without extra costs).
+   - Option B (Imagen): Integrate Google's Imagen 3 API separately for pixel-perfect raster images.
+
+--------------------------------------------------------------------------------
+CRITICAL ERROR 4: Deprecated Artifacts
+--------------------------------------------------------------------------------
+[Location]: `firebaseConfig.ts`
+[Issue]: File exists but contains comments stating it is deprecated.
+[Remediation Plan]: Delete this file immediately to prevent "Zombie Code"—where future developers might mistake it for active configuration.
+
+--------------------------------------------------------------------------------
+CRITICAL ERROR 5: Export File Format "Hack"
+--------------------------------------------------------------------------------
+[Location]: `pages/Editor.tsx`
+[Issue]: The `.doc` export is actually an HTML file with a `.doc` extension.
+[Risk]: Windows and macOS security features often block opening files where the extension doesn't match the MIME type (MIME sniffing protection).
+[Remediation Plan]: Implement the `docx` library recommendation found in Section 2, item 8.
+
+================================================================================
+END OF REPORT
+Thesis Development Team
+================================================================================
