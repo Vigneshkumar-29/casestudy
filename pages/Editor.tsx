@@ -607,12 +607,12 @@ const Editor: React.FC = () => {
 
 
   return (
-    <div className="flex h-screen bg-stone-50 overflow-hidden font-sans">
+    <div className="flex h-screen bg-stone-50 overflow-hidden font-sans" style={{ fontFamily: '"Satoshi", -apple-system, BlinkMacSystemFont, sans-serif' }}>
 
       {/* Sidebar - Outline */}
       <motion.div
         animate={{ width: sidebarOpen ? 300 : 0, opacity: sidebarOpen ? 1 : 0 }}
-        className="bg-white border-r border-stone-200 flex-shrink-0 flex flex-col overflow-hidden relative print:hidden"
+        className="bg-white border-r border-stone-200/60 flex-shrink-0 flex flex-col overflow-hidden relative print:hidden"
       >
         <div className="p-4 border-b border-stone-100 flex items-center justify-between min-w-[300px]">
           <div className="flex items-center gap-2 text-stone-500 font-bold text-xs tracking-wider uppercase">
@@ -638,9 +638,9 @@ const Editor: React.FC = () => {
                     document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' });
                   }}
                   className={`
-                    group flex items-center gap-2 p-3 rounded-lg text-sm cursor-pointer transition-all border-l-2 select-none
+                    group flex items-center gap-2 p-3 rounded-xl text-sm cursor-pointer transition-all duration-300 border-l-2 select-none
                     ${activeSectionId === section.id
-                      ? 'bg-stone-50 border-ink-900 text-ink-900 font-medium'
+                      ? 'bg-stone-100/80 border-academic-accent text-ink-900 font-semibold'
                       : 'border-transparent text-stone-500 hover:bg-stone-50 hover:text-ink-900'}
                   `}
                 >
@@ -665,7 +665,7 @@ const Editor: React.FC = () => {
                   document.getElementById(newSection.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 100);
               }}
-              className="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-dashed border-stone-200 hover:border-academic-blue hover:bg-blue-50/50 text-stone-400 hover:text-academic-blue transition-all group"
+              className="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-dashed border-stone-200 hover:border-academic-accent/40 hover:bg-academic-accent/[0.04] text-stone-400 hover:text-academic-accent transition-all duration-300 group"
             >
               <div className="w-5 h-5 rounded border border-current flex items-center justify-center">
                 <Plus size={12} />
@@ -679,7 +679,7 @@ const Editor: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 relative">
         {/* Header */}
-        <header className="h-16 bg-white border-b border-stone-200 flex items-center justify-between px-6 flex-shrink-0 print:hidden z-20">
+        <header className="h-16 bg-white/80 backdrop-blur-xl border-b border-stone-200/60 flex items-center justify-between px-6 flex-shrink-0 print:hidden z-20">
           <div className="flex items-center gap-4 overflow-hidden">
             {!sidebarOpen && (
               <Button variant="ghost" onClick={() => setSidebarOpen(true)} className="!p-2 mr-2">
@@ -687,21 +687,21 @@ const Editor: React.FC = () => {
               </Button>
             )}
             <div
-              className="w-8 h-8 bg-ink-900 rounded-lg flex items-center justify-center text-white font-serif italic font-bold cursor-pointer hover:scale-105 transition-transform"
+              className="w-8 h-8 bg-ink-900 rounded-xl flex items-center justify-center text-white font-serif italic font-bold cursor-pointer hover:scale-105 hover:shadow-glow transition-all duration-300"
               onClick={() => navigate('/dashboard')}
             >
               T
             </div>
             <div className="h-6 w-px bg-stone-200 mx-2" />
             <div className="flex flex-col overflow-hidden">
-              <h1 className="font-serif text-lg font-bold text-ink-900 truncate">{project?.title || 'Untitled Project'}</h1>
-              <span className="text-[10px] text-stone-400 uppercase tracking-widest">{project?.type || 'Draft'}</span>
+              <h1 className="font-serif text-lg text-ink-900 truncate">{project?.title || 'Untitled Project'}</h1>
+              <span className="text-[9px] text-stone-400 uppercase tracking-[0.2em] font-bold">{project?.type || 'Draft'}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             {isGenerating && (
-              <div className="flex items-center gap-2 text-xs text-academic-blue bg-blue-50 px-3 py-1.5 rounded-full animate-pulse">
+              <div className="flex items-center gap-2 text-xs text-academic-accent bg-academic-accent/10 px-3 py-1.5 rounded-full animate-pulse font-semibold">
                 <Sparkles size={12} />
                 <span>{generationProgress || "AI Working..."}</span>
               </div>
@@ -784,7 +784,7 @@ const Editor: React.FC = () => {
             </div>
 
             <button
-              className={`p-2 rounded-lg transition-colors ${chatOpen ? 'bg-ink-900 text-white shadow-lg' : 'hover:bg-stone-100 text-stone-500'}`}
+              className={`p-2.5 rounded-xl transition-all duration-300 ${chatOpen ? 'bg-ink-900 text-white shadow-lg shadow-ink-900/20' : 'hover:bg-stone-100 text-stone-500'}`}
               onClick={() => setChatOpen(!chatOpen)}
             >
               <Sparkles size={20} />
@@ -870,11 +870,11 @@ const Editor: React.FC = () => {
             initial={{ x: 400, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 400, opacity: 0 }}
-            className="w-[400px] bg-white border-l border-stone-200 shadow-2xl absolute right-0 top-0 bottom-0 z-40 flex flex-col"
+            className="w-[400px] bg-white border-l border-stone-200/60 shadow-dramatic absolute right-0 top-0 bottom-0 z-40 flex flex-col"
           >
             <div className="p-4 border-b border-stone-100 flex items-center justify-between bg-stone-50">
               <div className="flex items-center gap-2 font-serif font-bold text-lg text-ink-900">
-                <Sparkles className="text-academic-accent fill-current" size={18} />
+                <Sparkles className="text-academic-accent" size={18} />
                 Research Assistant
               </div>
               <button onClick={() => setChatOpen(false)} className="text-stone-400 hover:text-ink-900"><X size={18} /></button>
@@ -903,8 +903,8 @@ const Editor: React.FC = () => {
                 <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div
                     className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed ${msg.role === 'user'
-                      ? 'bg-ink-900 text-white rounded-br-none'
-                      : 'bg-stone-100 text-ink-900 rounded-bl-none'
+                      ? 'bg-ink-900 text-white rounded-br-sm shadow-lg shadow-ink-900/10'
+                      : 'bg-stone-100 text-ink-900 rounded-bl-sm'
                       }`}
                   >
                     {msg.text}
@@ -946,7 +946,7 @@ const Editor: React.FC = () => {
             <form onSubmit={handleChatSubmit} className="p-4 border-t border-stone-200 bg-white">
               <div className="relative">
                 <input
-                  className="w-full bg-stone-50 border border-stone-200 rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-academic-blue"
+                  className="w-full bg-stone-50 border border-stone-200/80 rounded-xl pl-4 pr-12 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-academic-accent/20 focus:border-academic-accent/30 transition-all"
                   placeholder="Ask me anything..."
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
@@ -954,7 +954,7 @@ const Editor: React.FC = () => {
                 <button
                   type="submit"
                   disabled={!chatInput.trim() || isChatLoading}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-ink-900 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black transition-colors"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-ink-900 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black transition-all shadow-lg shadow-ink-900/10"
                 >
                   <Send size={14} />
                 </button>
@@ -978,10 +978,10 @@ const Editor: React.FC = () => {
               animate={{ scale: 1, opacity: 1 }}
               className="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full relative z-10 text-center"
             >
-              <div className="w-12 h-12 bg-blue-50 text-academic-blue rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 bg-academic-accent/10 text-academic-accent rounded-2xl flex items-center justify-center mx-auto mb-5">
                 <Sparkles size={24} />
               </div>
-              <h3 className="text-xl font-serif font-bold text-ink-900 mb-2">Outline Generated</h3>
+              <h3 className="text-xl font-serif text-ink-900 mb-2">Outline Generated</h3>
               <p className="text-stone-500 text-sm mb-6">
                 I've created a structural outline for your document. Would you like me to write the first draft for all sections now?
               </p>

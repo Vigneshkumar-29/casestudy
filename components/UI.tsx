@@ -17,20 +17,20 @@ export const Button: React.FC<ButtonProps> = ({
   isLoading,
   ...props
 }) => {
-  const baseStyles = "inline-flex items-center justify-center px-6 py-3 rounded-lg font-sans font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide";
+  const baseStyles = "inline-flex items-center justify-center px-6 py-3 rounded-xl font-sans font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide relative overflow-hidden";
 
   const variants = {
-    primary: "bg-ink-900 text-white hover:bg-black shadow-md hover:shadow-lg",
-    secondary: "bg-stone-200 text-ink-900 hover:bg-stone-300",
-    ghost: "text-stone-600 hover:text-ink-900 hover:bg-stone-100",
-    academic: "border border-stone-300 text-stone-700 hover:border-academic-blue hover:text-academic-blue bg-transparent",
+    primary: "bg-ink-900 text-white hover:bg-black shadow-lg shadow-ink-900/10 hover:shadow-xl hover:shadow-ink-900/20",
+    secondary: "bg-stone-100 text-ink-900 hover:bg-stone-200 border border-stone-200/50",
+    ghost: "text-stone-500 hover:text-ink-900 hover:bg-stone-100",
+    academic: "border border-stone-300 text-stone-600 hover:border-academic-accent hover:text-academic-accent bg-transparent",
     outline: "bg-transparent border-2 border-ink-900 text-ink-900 hover:bg-ink-900 hover:text-white"
   };
 
   return (
     <motion.button
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.015 }}
+      whileTap={{ scale: 0.985 }}
       className={`${baseStyles} ${variants[variant]} ${className}`}
       {...props}
     >
@@ -51,10 +51,10 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input: React.FC<InputProps> = ({ label, className = '', ...props }) => {
   return (
-    <div className="flex flex-col gap-1.5 w-full">
-      {label && <label className="text-xs font-semibold uppercase tracking-wider text-stone-500">{label}</label>}
+    <div className="flex flex-col gap-2 w-full">
+      {label && <label className="text-xs font-bold uppercase tracking-widest text-stone-400">{label}</label>}
       <input
-        className={`bg-white border border-stone-200 rounded-lg px-4 py-3 text-ink-900 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-academic-blue focus:border-academic-blue transition-all ${className}`}
+        className={`bg-white border border-stone-200 rounded-xl px-4 py-3.5 text-ink-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-academic-accent/30 focus:border-academic-accent transition-all text-sm ${className}`}
         {...props}
       />
     </div>
@@ -72,9 +72,9 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ children, className = '', onClick, hoverEffect = false }) => {
   return (
     <motion.div
-      whileHover={hoverEffect && onClick ? { y: -4, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" } : {}}
+      whileHover={hoverEffect && onClick ? { y: -6, boxShadow: "0 12px 40px rgba(15,20,25,0.1), 0 4px 12px rgba(15,20,25,0.05)" } : {}}
       onClick={onClick}
-      className={`bg-white rounded-xl border border-stone-100 shadow-paper p-6 ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`bg-white rounded-2xl border border-stone-200/80 shadow-card p-6 transition-all duration-300 ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       {children}
     </motion.div>
@@ -82,14 +82,15 @@ export const Card: React.FC<CardProps> = ({ children, className = '', onClick, h
 };
 
 // --- Badge ---
-export const Badge: React.FC<{ children: React.ReactNode; color?: 'blue' | 'green' | 'stone' }> = ({ children, color = 'stone' }) => {
+export const Badge: React.FC<{ children: React.ReactNode; color?: 'blue' | 'green' | 'stone' | 'gold' }> = ({ children, color = 'stone' }) => {
   const colors = {
-    blue: "bg-blue-50 text-blue-800 border-blue-100",
-    green: "bg-green-50 text-green-800 border-green-100",
-    stone: "bg-stone-100 text-stone-600 border-stone-200",
+    blue: "bg-academic-blue/10 text-academic-blue border-academic-blue/20",
+    green: "bg-academic-green/10 text-academic-green border-academic-green/20",
+    stone: "bg-stone-100 text-stone-500 border-stone-200",
+    gold: "bg-academic-accent/10 text-academic-accent border-academic-accent/20",
   };
   return (
-    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${colors[color]}`}>
+    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.15em] border ${colors[color]}`}>
       {children}
     </span>
   );

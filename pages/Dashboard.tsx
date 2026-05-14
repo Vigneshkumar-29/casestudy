@@ -36,10 +36,10 @@ const DOC_TYPES = [
     desc: 'Present and pitch your innovative ideas',
     icon: Lightbulb,
     color: 'yellow',
-    bg: 'bg-yellow-50',
-    border: 'border-yellow-100',
-    text: 'text-yellow-600',
-    hover: 'group-hover:border-yellow-300'
+    bg: 'bg-amber-50',
+    border: 'border-amber-100',
+    text: 'text-amber-600',
+    hover: 'group-hover:border-amber-300'
   },
   {
     id: 'essay',
@@ -47,10 +47,10 @@ const DOC_TYPES = [
     desc: 'Structured argumentative writing',
     icon: PenTool,
     color: 'green',
-    bg: 'bg-green-50',
-    border: 'border-green-100',
-    text: 'text-green-600',
-    hover: 'group-hover:border-green-300'
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-100',
+    text: 'text-emerald-600',
+    hover: 'group-hover:border-emerald-300'
   },
   {
     id: 'thesis',
@@ -58,10 +58,10 @@ const DOC_TYPES = [
     desc: 'In-depth research for advanced degrees',
     icon: GraduationCap,
     color: 'red',
-    bg: 'bg-red-50',
-    border: 'border-red-100',
-    text: 'text-red-600',
-    hover: 'group-hover:border-red-300'
+    bg: 'bg-rose-50',
+    border: 'border-rose-100',
+    text: 'text-rose-600',
+    hover: 'group-hover:border-rose-300'
   },
   {
     id: 'review',
@@ -158,8 +158,6 @@ const Dashboard: React.FC = () => {
     if (!selectedType || !newProjectTitle) return;
     setIsModalOpen(false);
 
-    // Instead of creating locally, navigate to editor with 'new' param
-    // The Editor will handle the actual database insertion upon generation
     setTimeout(() => {
       setModalStep(1);
       setSelectedType(null);
@@ -173,9 +171,6 @@ const Dashboard: React.FC = () => {
         type: selectedType.label,
         title: newProjectTitle,
         description: newProjectDesc,
-        // Note: Files cannot be easily passed via state if they are large. 
-        // Ideally, upload them first and pass URLs, or use a global context/store.
-        // For now, we'll assume the Editor can handle the metadata or we'd upload here.
         files: uploadedFiles
       }
     });
@@ -183,8 +178,6 @@ const Dashboard: React.FC = () => {
 
   const handleDeleteProject = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-
-    // Optimistic UI update
     setProjects(prev => prev.filter(p => p.id !== id));
     setActiveMenuId(null);
 
@@ -193,7 +186,6 @@ const Dashboard: React.FC = () => {
       if (error) throw error;
     } catch (err) {
       console.error("Failed to delete project", err);
-      // Revert if failed (optional, but good practice)
       fetchProjects();
     }
   };
@@ -265,24 +257,24 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col font-sans relative">
       {/* Navbar */}
-      <nav className="border-b border-stone-200 bg-white/50 backdrop-blur sticky top-0 z-30">
+      <nav className="border-b border-stone-200/60 bg-white/60 backdrop-blur-xl sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-8 h-8 bg-ink-900 rounded-lg flex items-center justify-center text-stone-50 font-serif italic font-bold text-xl">
+          <div className="flex items-center gap-2.5 cursor-pointer group" onClick={() => navigate('/')}>
+            <div className="w-9 h-9 bg-ink-900 rounded-xl flex items-center justify-center text-stone-50 font-serif italic font-bold text-xl shadow-lg group-hover:shadow-glow transition-all duration-300">
               T
             </div>
-            <span className="font-serif font-bold text-xl">Thesis</span>
+            <span className="font-serif text-xl tracking-tight">Thesis</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-stone-500 hidden md:block">
+            <span className="text-sm text-stone-500 hidden md:block font-medium">
               {currentUser?.user_metadata?.display_name || currentUser?.email}
             </span>
-            <div className="w-8 h-8 rounded-full bg-academic-accent flex items-center justify-center text-white font-medium text-xs">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-academic-accent to-academic-blue flex items-center justify-center text-white font-bold text-xs shadow-lg">
               {getInitials(currentUser?.user_metadata?.display_name || currentUser?.email || '')}
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-2.5 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
               title="Log Out"
             >
               <LogOut className="w-4 h-4" />
@@ -291,20 +283,20 @@ const Dashboard: React.FC = () => {
         </div>
       </nav>
 
-      <main className="flex-1 max-w-7xl mx-auto px-6 py-12 w-full">
+      <main className="flex-1 max-w-7xl mx-auto px-6 py-14 w-full">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
           <div>
             <h1 className="font-serif text-3xl md:text-4xl text-ink-900 mb-2">Your Workspace</h1>
-            <p className="text-stone-500">Manage your research, reports, and case studies.</p>
+            <p className="text-stone-500 font-medium">Manage your research, reports, and case studies.</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
               <input
                 type="text"
                 placeholder="Search projects..."
-                className="pl-10 pr-4 py-2.5 rounded-lg border border-stone-200 bg-white text-sm focus:outline-none focus:ring-1 focus:ring-academic-blue w-64"
+                className="pl-10 pr-4 py-3 rounded-xl border border-stone-200/80 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-academic-accent/20 focus:border-academic-accent/30 w-64 transition-all"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -320,21 +312,18 @@ const Dashboard: React.FC = () => {
           {/* New Project Card */}
           <div
             onClick={() => setIsModalOpen(true)}
-            className="group rounded-xl border-2 border-dashed border-stone-200 hover:border-academic-blue bg-stone-50/50 hover:bg-blue-50/30 flex flex-col items-center justify-center h-64 cursor-pointer transition-all duration-300 relative overflow-hidden"
+            className="group rounded-2xl border-2 border-dashed border-stone-200/80 hover:border-academic-accent/40 bg-stone-50/50 hover:bg-academic-accent/[0.03] flex flex-col items-center justify-center h-64 cursor-pointer transition-all duration-400 relative overflow-hidden"
           >
-            <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center mb-4 group-hover:bg-academic-blue group-hover:text-white transition-all duration-300 z-10">
+            <div className="w-13 h-13 rounded-xl bg-stone-100 flex items-center justify-center mb-4 group-hover:bg-academic-accent group-hover:text-white transition-all duration-300 z-10 shadow-subtle">
               <Plus className="w-6 h-6 text-stone-400 group-hover:text-white" />
             </div>
-            <span className="font-medium text-stone-500 group-hover:text-academic-blue transition-colors z-10">Create new project</span>
-
-            {/* Hover background effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <span className="font-semibold text-stone-500 group-hover:text-academic-accent transition-colors z-10">Create new project</span>
           </div>
 
           {isLoadingProjects && (
             <div className="col-span-full py-20 flex flex-col items-center justify-center text-stone-400">
-              <Loader2 className="w-8 h-8 animate-spin mb-4 text-academic-blue" />
-              <p>Loading projects...</p>
+              <Loader2 className="w-8 h-8 animate-spin mb-4 text-academic-accent" />
+              <p className="font-medium">Loading projects...</p>
             </div>
           )}
 
@@ -353,7 +342,7 @@ const Dashboard: React.FC = () => {
                       e.stopPropagation();
                       setActiveMenuId(activeMenuId === project.id ? null : project.id);
                     }}
-                    className={`p-2 rounded-lg transition-colors ${activeMenuId === project.id ? 'bg-stone-100 text-ink-900 opacity-100' : 'hover:bg-stone-100 text-stone-400 bg-white/80 backdrop-blur-sm shadow-sm border border-stone-100'}`}
+                    className={`p-2 rounded-lg transition-colors ${activeMenuId === project.id ? 'bg-stone-100 text-ink-900 opacity-100' : 'hover:bg-stone-100 text-stone-400 bg-white/80 backdrop-blur-sm shadow-subtle border border-stone-200/50'}`}
                   >
                     <MoreHorizontal className="w-4 h-4" />
                   </button>
@@ -365,26 +354,26 @@ const Dashboard: React.FC = () => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-stone-100 py-1.5 overflow-hidden flex flex-col z-30 origin-top-right"
+                        className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-float border border-stone-200/60 py-1.5 overflow-hidden flex flex-col z-30 origin-top-right"
                       >
                         <button
                           onClick={(e) => { e.stopPropagation(); navigate(`/editor/${project.id}`); }}
                           className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-stone-600 hover:bg-stone-50 hover:text-ink-900 text-left transition-colors font-medium"
                         >
-                          <ExternalLink className="w-4 h-4 opacity-70" /> Open
+                          <ExternalLink className="w-4 h-4 opacity-60" /> Open
                         </button>
                         <button
                           onClick={(e) => handleDuplicateProject(e, project)}
                           className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-stone-600 hover:bg-stone-50 hover:text-ink-900 text-left transition-colors font-medium"
                         >
-                          <Copy className="w-4 h-4 opacity-70" /> Duplicate
+                          <Copy className="w-4 h-4 opacity-60" /> Duplicate
                         </button>
                         <div className="h-px bg-stone-100 my-1" />
                         <button
                           onClick={(e) => handleDeleteProject(e, project.id)}
                           className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 text-left transition-colors font-medium"
                         >
-                          <Trash2 className="w-4 h-4 opacity-70" /> Delete
+                          <Trash2 className="w-4 h-4 opacity-60" /> Delete
                         </button>
                       </motion.div>
                     )}
@@ -392,19 +381,19 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="w-10 h-10 rounded-lg bg-stone-50 border border-stone-100 flex items-center justify-center mb-6">
+              <div className="w-11 h-11 rounded-xl bg-stone-50 border border-stone-200/50 flex items-center justify-center mb-6 shadow-subtle">
                 <FileText className="w-5 h-5 text-stone-600" />
               </div>
 
               <div className="flex-1">
-                <h3 className="font-serif text-lg font-medium text-ink-900 leading-snug mb-2 line-clamp-2 pr-8">
+                <h3 className="font-serif text-lg text-ink-900 leading-snug mb-2 line-clamp-2 pr-8">
                   {project.title}
                 </h3>
                 <div className="flex items-center gap-2 mb-4">
                   <Badge color={project.status === 'Complete' ? 'green' : project.status === 'Review' ? 'blue' : 'stone'}>
                     {project.status}
                   </Badge>
-                  <span className="text-xs text-stone-400">• {project.type}</span>
+                  <span className="text-xs text-stone-400 font-medium">• {project.type}</span>
                 </div>
               </div>
 
@@ -433,26 +422,26 @@ const Dashboard: React.FC = () => {
               initial={{ scale: 0.95, opacity: 0, y: 10 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 10 }}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden relative z-10 flex flex-col"
+              className="bg-white rounded-[1.5rem] shadow-dramatic w-full max-w-4xl max-h-[90vh] overflow-hidden relative z-10 flex flex-col"
             >
               {/* Modal Header */}
               <div className="px-8 py-6 border-b border-stone-100 flex items-center justify-between bg-white sticky top-0 z-20">
                 <div>
-                  <h2 className="font-serif text-2xl font-bold text-ink-900">Create New Document</h2>
-                  <p className="text-stone-500 text-sm mt-1">
+                  <h2 className="font-serif text-2xl text-ink-900">Create New Document</h2>
+                  <p className="text-stone-500 text-sm mt-1 font-medium">
                     {modalStep === 1 ? 'Choose a document type to get started' : 'Define your topic and scope'}
                   </p>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="p-2 hover:bg-stone-100 rounded-full text-stone-400 hover:text-ink-900 transition-colors"
+                  className="p-2.5 hover:bg-stone-100 rounded-xl text-stone-400 hover:text-ink-900 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Modal Content */}
-              <div className="flex-1 overflow-y-auto p-8 bg-stone-50/50">
+              <div className="flex-1 overflow-y-auto p-8 bg-stone-50/30">
                 <AnimatePresence mode="wait">
                   {modalStep === 1 ? (
                     <motion.div
@@ -470,17 +459,17 @@ const Dashboard: React.FC = () => {
                             setModalStep(2);
                           }}
                           className={`
-                                                group relative p-6 rounded-xl border bg-white cursor-pointer transition-all duration-200
-                                                ${type.border} hover:shadow-lg hover:-translate-y-1
-                                            `}
+                            group relative p-6 rounded-2xl border bg-white cursor-pointer transition-all duration-300
+                            ${type.border} hover:shadow-float hover:-translate-y-1
+                          `}
                         >
-                          <div className={`w-12 h-12 rounded-lg ${type.bg} ${type.text} flex items-center justify-center mb-4`}>
+                          <div className={`w-12 h-12 rounded-xl ${type.bg} ${type.text} flex items-center justify-center mb-4`}>
                             <type.icon className="w-6 h-6" />
                           </div>
-                          <h3 className="font-serif text-lg font-bold text-ink-900 mb-2">{type.label}</h3>
+                          <h3 className="font-serif text-lg text-ink-900 mb-2">{type.label}</h3>
                           <p className="text-sm text-stone-500 leading-relaxed">{type.desc}</p>
 
-                          <div className={`mt-4 text-xs font-semibold ${type.text} flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity`}>
+                          <div className={`mt-4 text-[10px] font-bold ${type.text} flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity tracking-wider uppercase`}>
                             Select <ArrowRight className="w-3 h-3" />
                           </div>
                         </div>
@@ -494,17 +483,17 @@ const Dashboard: React.FC = () => {
                       exit={{ opacity: 0, x: 20 }}
                       className="max-w-xl mx-auto"
                     >
-                      <div className="bg-white p-8 rounded-xl border border-stone-200 shadow-sm">
-                        <div className="flex items-center gap-3 mb-6 p-3 bg-stone-50 rounded-lg border border-stone-100">
+                      <div className="bg-white p-8 rounded-2xl border border-stone-200/60 shadow-card">
+                        <div className="flex items-center gap-3 mb-6 p-3 bg-stone-50 rounded-xl border border-stone-100">
                           {selectedType && (
-                            <div className={`w-8 h-8 rounded ${selectedType.bg} ${selectedType.text} flex items-center justify-center`}>
+                            <div className={`w-9 h-9 rounded-lg ${selectedType.bg} ${selectedType.text} flex items-center justify-center`}>
                               <selectedType.icon className="w-4 h-4" />
                             </div>
                           )}
-                          <span className="font-medium text-ink-900">{selectedType?.label}</span>
+                          <span className="font-semibold text-ink-900">{selectedType?.label}</span>
                           <button
                             onClick={() => setModalStep(1)}
-                            className="ml-auto text-xs text-stone-400 hover:text-academic-blue underline"
+                            className="ml-auto text-xs text-stone-400 hover:text-academic-accent font-semibold"
                           >
                             Change
                           </button>
@@ -519,12 +508,12 @@ const Dashboard: React.FC = () => {
                             autoFocus
                           />
 
-                          <div className="flex flex-col gap-1.5 w-full">
-                            <label className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                          <div className="flex flex-col gap-2 w-full">
+                            <label className="text-xs font-bold uppercase tracking-[0.15em] text-stone-400">
                               Description / Research Question
                             </label>
                             <textarea
-                              className="bg-white border border-stone-200 rounded-lg px-4 py-3 text-ink-900 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-academic-blue focus:border-academic-blue transition-all min-h-[120px] resize-none"
+                              className="bg-white border border-stone-200 rounded-xl px-4 py-3.5 text-ink-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-academic-accent/30 focus:border-academic-accent transition-all min-h-[120px] resize-none text-sm"
                               placeholder="Briefly describe what you want to write about. Thesis will use this to generate an initial outline."
                               value={newProjectDesc}
                               onChange={(e) => setNewProjectDesc(e.target.value)}
@@ -532,18 +521,18 @@ const Dashboard: React.FC = () => {
                           </div>
 
                           {/* Reference Document Upload */}
-                          <div className="flex flex-col gap-1.5 w-full">
-                            <label className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                          <div className="flex flex-col gap-2 w-full">
+                            <label className="text-xs font-bold uppercase tracking-[0.15em] text-stone-400">
                               Reference Material (Optional)
                             </label>
                             <div
                               className={`
-                                                        border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer
-                                                        ${isDragging
-                                  ? 'border-academic-blue bg-blue-50/50'
-                                  : 'border-stone-200 bg-stone-50 hover:border-stone-300 hover:bg-stone-100'
+                                border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-300 cursor-pointer
+                                ${isDragging
+                                  ? 'border-academic-accent bg-academic-accent/[0.04]'
+                                  : 'border-stone-200 bg-stone-50/50 hover:border-stone-300 hover:bg-stone-100/50'
                                 }
-                                                    `}
+                              `}
                               onDragOver={handleDragOver}
                               onDragLeave={handleDragLeave}
                               onDrop={handleDrop}
@@ -556,10 +545,10 @@ const Dashboard: React.FC = () => {
                                 ref={fileInputRef}
                                 onChange={handleFileSelect}
                               />
-                              <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center mb-3">
-                                <UploadCloud className={`w-5 h-5 ${isDragging ? 'text-academic-blue' : 'text-stone-400'}`} />
+                              <div className="w-11 h-11 rounded-xl bg-white shadow-subtle flex items-center justify-center mb-3 border border-stone-200/50">
+                                <UploadCloud className={`w-5 h-5 ${isDragging ? 'text-academic-accent' : 'text-stone-400'}`} />
                               </div>
-                              <p className="text-sm font-medium text-ink-900 mb-1">
+                              <p className="text-sm font-semibold text-ink-900 mb-1">
                                 Click to upload or drag and drop
                               </p>
                               <p className="text-xs text-stone-400">
@@ -571,13 +560,13 @@ const Dashboard: React.FC = () => {
                             {uploadedFiles.length > 0 && (
                               <div className="mt-3 space-y-2">
                                 {uploadedFiles.map((file, index) => (
-                                  <div key={index} className="flex items-center justify-between p-3 bg-white border border-stone-200 rounded-lg shadow-sm">
+                                  <div key={index} className="flex items-center justify-between p-3 bg-white border border-stone-200/80 rounded-xl shadow-subtle">
                                     <div className="flex items-center gap-3 overflow-hidden">
-                                      <div className="w-8 h-8 rounded bg-stone-100 flex items-center justify-center flex-shrink-0">
+                                      <div className="w-9 h-9 rounded-lg bg-stone-100 flex items-center justify-center flex-shrink-0">
                                         <FileIcon className="w-4 h-4 text-stone-500" />
                                       </div>
                                       <div className="flex flex-col min-w-0">
-                                        <span className="text-sm font-medium text-ink-900 truncate">{file.name}</span>
+                                        <span className="text-sm font-semibold text-ink-900 truncate">{file.name}</span>
                                         <span className="text-xs text-stone-400">{(file.size / 1024).toFixed(1)} KB</span>
                                       </div>
                                     </div>
@@ -586,7 +575,7 @@ const Dashboard: React.FC = () => {
                                         e.stopPropagation();
                                         removeFile(index);
                                       }}
-                                      className="p-1 hover:bg-red-50 rounded text-stone-400 hover:text-red-500 transition-colors"
+                                      className="p-1.5 hover:bg-red-50 rounded-lg text-stone-400 hover:text-red-500 transition-colors"
                                     >
                                       <XCircle className="w-4 h-4" />
                                     </button>

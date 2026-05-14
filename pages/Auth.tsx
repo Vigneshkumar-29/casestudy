@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { ArrowRight, CheckCircle2, AlertCircle, ArrowLeft, Sparkles } from 'lucide-react';
 import { Button, Input } from '../components/UI';
 import { useAuth } from '../context/AuthContext';
 
@@ -112,16 +112,16 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
       <div className="w-full lg:w-1/2 flex flex-col p-6 sm:p-12 lg:p-20 justify-center relative">
         <div 
             onClick={() => navigate('/')} 
-            className="absolute top-8 left-8 flex items-center gap-2 cursor-pointer group"
+            className="absolute top-8 left-8 flex items-center gap-2.5 cursor-pointer group"
         >
-            <div className="w-8 h-8 bg-ink-900 rounded-lg flex items-center justify-center text-stone-50 font-serif italic font-bold text-xl shadow-md group-hover:scale-105 transition-transform">T</div>
-            <span className="font-serif font-bold text-xl tracking-tight">Thesis</span>
+            <div className="w-9 h-9 bg-ink-900 rounded-xl flex items-center justify-center text-stone-50 font-serif italic font-bold text-xl shadow-lg group-hover:scale-105 group-hover:shadow-glow transition-all duration-300">T</div>
+            <span className="font-serif text-xl tracking-tight">Thesis</span>
         </div>
 
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="max-w-md w-full mx-auto"
         >
           <AnimatePresence mode="wait">
@@ -132,10 +132,10 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                 >
-                    <h1 className="font-serif text-4xl font-medium mb-3">
+                    <h1 className="font-serif text-4xl mb-3">
                         {isLogin ? 'Welcome back.' : 'Start your masterpiece.'}
                     </h1>
-                    <p className="text-stone-500 mb-8 text-lg">
+                    <p className="text-stone-500 mb-10 text-lg">
                         {isLogin 
                         ? 'Enter your credentials to access your workspace.' 
                         : 'Join the academic platform designed for excellence.'}
@@ -144,10 +144,10 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
                     <button 
                         onClick={handleGoogleAuth}
                         type="button"
-                        className="w-full flex items-center justify-center gap-3 px-6 py-3.5 border border-stone-200 rounded-xl hover:bg-stone-50 transition-colors mb-6 group"
+                        className="w-full flex items-center justify-center gap-3 px-6 py-4 border border-stone-200 rounded-xl hover:bg-stone-50 hover:border-stone-300 transition-all mb-8 group shadow-subtle"
                     >
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5 group-hover:scale-110 transition-transform" alt="Google" />
-                        <span className="font-medium text-stone-600 group-hover:text-ink-900">
+                        <span className="font-semibold text-stone-600 group-hover:text-ink-900">
                             {isLogin ? 'Sign in with Google' : 'Sign up with Google'}
                         </span>
                     </button>
@@ -157,19 +157,19 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
                         <div className="w-full border-t border-stone-200"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                        <span className="px-4 bg-white text-stone-400 uppercase tracking-wider text-xs font-semibold">Or continue with email</span>
+                        <span className="px-4 bg-white text-stone-400 uppercase tracking-[0.15em] text-[10px] font-bold">Or continue with email</span>
                         </div>
                     </div>
 
                     {error && (
-                        <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg flex items-center gap-2 text-red-600 text-sm">
-                            <AlertCircle className="w-4 h-4" />
+                        <div className="mb-5 p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-2.5 text-red-600 text-sm">
+                            <AlertCircle className="w-4 h-4 shrink-0" />
                             {error}
                         </div>
                     )}
 
                     {message && (
-                        <div className="mb-4 p-3 bg-green-50 border border-green-100 rounded-lg flex items-center gap-2 text-green-700 text-sm">
+                        <div className="mb-5 p-4 bg-green-50 border border-green-100 rounded-xl flex items-center gap-2.5 text-green-700 text-sm">
                             <CheckCircle2 className="w-4 h-4 shrink-0" />
                             <span>{message}</span>
                         </div>
@@ -193,7 +193,7 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                             <Input 
                                 label="Password"
                                 type="password" 
@@ -207,7 +207,7 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
                                     <button 
                                         type="button"
                                         onClick={() => setView('forgot-password')} 
-                                        className="text-xs text-stone-400 hover:text-academic-blue transition-colors"
+                                        className="text-xs text-stone-400 hover:text-academic-accent transition-colors"
                                     >
                                         Forgot password?
                                     </button>
@@ -217,19 +217,19 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
 
                         <Button 
                             type="submit" 
-                            className="w-full !py-4 !rounded-xl !text-base shadow-lg shadow-ink-900/20"
+                            className="w-full !py-4 !rounded-xl !text-base shadow-lg shadow-ink-900/10 group"
                             isLoading={isLoading}
                         >
                         {isLogin ? 'Sign In' : 'Create Account'}
-                        {!isLoading && <ArrowRight className="w-4 h-4 ml-2" />}
+                        {!isLoading && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />}
                         </Button>
                     </form>
 
-                    <p className="mt-8 text-center text-stone-500 text-sm">
+                    <p className="mt-10 text-center text-stone-500 text-sm">
                         {isLogin ? "Don't have an account? " : "Already have an account? "}
                         <Link 
                             to={isLogin ? "/signup" : "/login"} 
-                            className="font-semibold text-ink-900 hover:text-academic-blue transition-colors hover:underline"
+                            className="font-bold text-ink-900 hover:text-academic-accent transition-colors"
                             onClick={() => { setError(''); setMessage(''); }}
                         >
                         {isLogin ? "Sign up" : "Log in"}
@@ -245,12 +245,12 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
                 >
                     <button 
                         onClick={() => setView('auth')}
-                        className="flex items-center gap-2 text-stone-500 hover:text-ink-900 mb-6 text-sm"
+                        className="flex items-center gap-2 text-stone-500 hover:text-ink-900 mb-6 text-sm font-medium"
                     >
                         <ArrowLeft className="w-4 h-4" /> Back to login
                     </button>
 
-                    <h1 className="font-serif text-3xl font-medium mb-3">
+                    <h1 className="font-serif text-3xl mb-3">
                         Reset Password
                     </h1>
                     <p className="text-stone-500 mb-8">
@@ -258,14 +258,14 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
                     </p>
 
                     {error && (
-                        <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg flex items-center gap-2 text-red-600 text-sm">
+                        <div className="mb-5 p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-2.5 text-red-600 text-sm">
                             <AlertCircle className="w-4 h-4" />
                             {error}
                         </div>
                     )}
 
                     {message && (
-                        <div className="mb-4 p-3 bg-green-50 border border-green-100 rounded-lg flex items-center gap-2 text-green-700 text-sm">
+                        <div className="mb-5 p-4 bg-green-50 border border-green-100 rounded-xl flex items-center gap-2.5 text-green-700 text-sm">
                             <CheckCircle2 className="w-4 h-4" />
                             {message}
                         </div>
@@ -297,21 +297,21 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
       {/* Right Panel - Visual */}
       <div className="hidden lg:flex w-1/2 bg-ink-900 text-white relative overflow-hidden items-center justify-center p-12">
         {/* Background Effects */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-academic-blue/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-academic-accent/10 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05]" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-academic-blue/15 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-academic-accent/8 blur-[120px] rounded-full -translate-x-1/3 translate-y-1/3" />
+        <div className="absolute inset-0 grain-overlay" />
 
         <div className="relative z-10 max-w-lg">
-            <div className="w-12 h-12 mb-8 bg-white/10 backdrop-blur border border-white/20 rounded-xl flex items-center justify-center">
-                <CheckCircle2 className="w-6 h-6 text-academic-accent" />
+            <div className="w-14 h-14 mb-10 bg-white/8 backdrop-blur-sm border border-white/10 rounded-2xl flex items-center justify-center shadow-lg">
+                <Sparkles className="w-7 h-7 text-academic-accent" />
             </div>
-            <blockquote className="font-serif text-4xl leading-tight mb-8">
+            <blockquote className="font-serif text-4xl leading-tight mb-10">
                 "Thesis allows me to focus on the argument, not the formatting. It is the silent partner every researcher needs."
             </blockquote>
             <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-stone-200 border-2 border-white/10" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-academic-accent/40 to-academic-blue/30 border-2 border-white/10" />
                 <div>
-                    <div className="font-medium">Dr. Elena Rostova</div>
+                    <div className="font-semibold text-lg">Dr. Elena Rostova</div>
                     <div className="text-sm text-stone-400">Department of Anthropology, Cambridge</div>
                 </div>
             </div>

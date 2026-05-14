@@ -7,8 +7,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // Development fallback values (for local development only)
 // In production, always use environment variables
-const DEV_SUPABASE_URL = 'https://qkcrnnlravoizvgmgpze.supabase.co';
-const DEV_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrY3JubmxyYXZvaXp2Z21ncHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzMzM0NTUsImV4cCI6MjA3OTkwOTQ1NX0.KHv5KF3CWt2zlXrCCSF1Den63F-DQaRVpjEhoqRuJmc';
+const DEV_SUPABASE_URL = 'https://uuajupocsfqjhekdsnwz.supabase.co';
+const DEV_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1YWp1cG9jc2Zxamhla2Rzbnd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NjY4ODMsImV4cCI6MjA5NDM0Mjg4M30.swTKxn-jJ88fJKnj26OltG4Hogzse-oEAotlhHRCQ4w';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || DEV_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || DEV_SUPABASE_ANON_KEY;
