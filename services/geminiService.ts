@@ -2,18 +2,21 @@ import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { Source } from "../types";
 
 const getClient = (): GoogleGenAI => {
-  // Use Vite's import.meta.env for client-side environment variables
-  // The API key should be defined in .env.local as VITE_GEMINI_API_KEY
+  // The API key must be defined in .env.local as VITE_GEMINI_API_KEY
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
   if (!apiKey) {
-    console.warn(
-      "Gemini API Key not found. Please add VITE_GEMINI_API_KEY to your .env.local file."
+    throw new Error(
+      "Gemini API Key not found.\n\n" +
+      "Please add VITE_GEMINI_API_KEY to your .env.local file:\n" +
+      "  VITE_GEMINI_API_KEY=your-api-key-here\n\n" +
+      "Get your key from: https://aistudio.google.com/app/apikey"
     );
   }
 
-  return new GoogleGenAI({ apiKey: apiKey || '' });
+  return new GoogleGenAI({ apiKey });
 };
+
 
 export const generateOutline = async (topic: string, type: string): Promise<string> => {
   const ai = getClient();
